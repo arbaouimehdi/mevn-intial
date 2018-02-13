@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const { catchErrors } = require('../handlers/errorHandlers');
+const { catchErrors } = require('../../handlers/errorHandlers');
 
 // Controllers
 const postController = require('../controllers/postController');

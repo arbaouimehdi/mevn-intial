@@ -30,8 +30,10 @@ app.use(morgan('combined'));
 /**
  * Routes
  */
-const routes = require('./routes/index');
+const routes = require('./frontend/routes/index');
+const admin_routes = require('./admin/routes/admin_routes');
 app.use('/', routes);
+app.use('/admin', admin_routes);
 
 /**
  * Server Connection
