@@ -4,7 +4,8 @@
     <h4><router-link v-bind:to="{ name: 'NewPost' }">Add New Post</router-link></h4>
     <ul>
       <li v-for="post in posts">
-        <b>{{ post.title }}</b>
+        {{ post.title }} -
+        <b>{{ post.category.name }}</b>
         <p>
           {{ post.description }}
           <a href="" @click="deletePost(post._id)">Delete</a>
@@ -17,10 +18,12 @@
 
 <script>
   import PostsService from '@/services/PostsService'
+  import CategoriesService from '@/services/CategoriesService';
+  
   export default {
     data() {
       return {
-        posts: []
+        posts: [],
       }
     },
     mounted() {
@@ -42,5 +45,12 @@
 <style>
   .list {
     text-align: left;
+  }
+  b {
+    background: #444;
+    font-size: 10px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 2px 6px;
   }
 </style>
