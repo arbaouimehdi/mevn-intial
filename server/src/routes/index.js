@@ -5,37 +5,25 @@ const { catchErrors } = require('../handlers/errorHandlers');
 
 // Controllers
 const postController = require('../controllers/postController');
+const categoryController = require('../controllers/categoryController');
 
 // Models
 const Category = require('../models/category');
 const Post = require('../models/post');
 
 //
-// Get all Categories
+// Categories
 router.get('/categories', (req, res) => {
-  Category.find({}, (err, caregories) => {
-    if (err) {
-      console.log('Error');
-    }
-    res.send(caregories);
-  })
+  catchErrors(categoryController.getAllCategories(req, res));
 });
-
-//
-// Get Category by ID
 router.get('/category/:id', (req, res) => {
-  Category.find({ _id: req.params.id } ,(err, category) => {
-    if (err) {
-      console.error(err);
-    }
-    res.send(category);
-  })
+  catchErrors(categoryController.getCategoryById(req, res));
 });
 
 // 
 // Posts
 router.get('/posts', (req, res) => { 
-  catchErrors(postController.getAllPosts(res));
+  catchErrors(postController.getAllPosts(req, res));
 });
 router.get('/post/:id', (req, res) => {
   catchErrors(postController.getPostById(req, res));

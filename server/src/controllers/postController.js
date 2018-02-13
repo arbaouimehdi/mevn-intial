@@ -3,7 +3,7 @@ const Post = require('../models/post');
 
 //
 // get all Posts
-exports.getAllPosts = (res) => {
+exports.getAllPosts = (req, res) => {
   Post.find().populate('category').exec(function(err, posts) {
     res.send(posts)
   });
