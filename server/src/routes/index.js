@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+const { catchErrors } = require('../handlers/errorHandlers');
 
 // Controllers
+const postController = require('../controllers/postController');
 
 // Models
 const Category = require('../models/category');
@@ -31,83 +33,24 @@ router.get('/category/:id', (req, res) => {
 });
 
 // 
-// Get all Posts
-router.get('/posts', (req, res) => {
-  Post.find().populate('category').exec(function(err, posts) {
-    if (err) {
-      console.log('Error');
-    }
-    res.send(posts);
-  });
-})
-
-//
-// Get Post by ID
+// Posts
+router.get('/posts', (req, res) => { 
+  catchErrors(postController.getAllPosts(res));
+});
 router.get('/post/:id', (req, res) => {
-  Post.findById(req.params.id, (err, post) => {
-    if (err) console.error(err);
-    res.send(post);
-  })
+  catchErrors(postController.getPostById(req, res));
 });
-
-//
-// Create a new post
 router.post('/posts', (req, res) => {
-  let id = mongoose.Types.ObjectId();
-  let title = req.body.title;
-  let description = req.body.description;
-  let category = req.body.category;
-
-  let new_post = Post({
-    _id: id,
-    title: title,
-    description: description,
-    category: category
-  });
-
-  new_post.save((err) => {
-    if (err) console.error(err);
-    res.send({
-      success: true,
-      message: 'Post created successfully'
-    })
-  })
-
+  catchErrors(postController.addNewPost(req, res));
 })
-
-//
-// Update a Post
 router.put('/post/:id', (req, res) => {
-  Post.findById(req.params.id, (err, post) => {
-    
-    if (err) console.error(err);
-
-    post.title = req.body.title;
-    post.description = req.body.description;
-    post.category = req.body.category;
-
-    post.save((err) => {
-      if (err) console.error(err);
-      res.send({
-        success: true,
-        message: "Post updated successfuly"
-      })
-    })
-
-  })
+  catchErrors(postController.updatePost(req, res));
 });
-
-//
-// Delete a Post
+router.put('/post/:id', (req, res) => {
+  catchErrors(postController.updatePost(req, res));
+});
 router.delete('/post/:id', (req, res) => {
-  Post.remove({_id: req.params.id}, (err, post) => {
-    if (err) console.error(err);
-    res.send({
-      sucess: true,
-      message: "Post deleted successfully"
-    })
-  })
+  catchErrors(postController.deletePost(req, res));
 })
-
 
 module.exports = router;
