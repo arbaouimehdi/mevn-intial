@@ -3,12 +3,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const flash = require('flash');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const port = process.env.PORT || 3000;
 const app = express();
 
 /**
- * Connect the Databse
+ * Connect the Database
  */
 mongoose.connect('mongodb://localhost:27017/helloworld2');
 const db = mongoose.connection;
@@ -22,10 +26,21 @@ db.on('open', () => {
 /**
 * Setups
 */
+//app.use(flash());
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'awesomecookiesecret',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({
+    url: process.env.MONGO_URL || 'mongodb://localhost:27017/helloworld2',
+  }),
+}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * Routes
